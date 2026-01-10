@@ -1,0 +1,22 @@
+$ORIGIN x.test.
+$TTL 60
+@       IN      SOA     dns.test. admin.x.test. (
+                        2024010101 ; serial
+                        3600       ; refresh
+                        1800       ; retry
+                        604800     ; expire
+                        86400      ; minimum
+                        )
+        IN      NS      dns.test.
+
+; SPF records
+@                       IN      TXT     "v=spf1 ip4:_NETWORK.24.20/31 -all"
+pass.spf                IN      TXT     "v=spf1 ip4:_NETWORK.24.20/31 -all"
+fail.spf                IN      TXT     "v=spf1 -all"
+
+; DMARC record
+_dmarc                  IN      TXT     "v=DMARC1; p=reject; pct=100"
+
+; SMTP servers
+plain.smtp              IN      A       _NETWORK.24.20
+dkim.smtp               IN      A       _NETWORK.24.21

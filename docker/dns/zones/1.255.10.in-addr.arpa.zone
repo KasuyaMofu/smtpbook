@@ -1,0 +1,14 @@
+$ORIGIN 1.255.10.in-addr.arpa.
+$TTL 86400
+@       IN      SOA     dns.test. admin.a.test. (
+                        2024010101 ; serial
+                        3600       ; refresh
+                        1800       ; retry
+                        604800     ; expire
+                        86400      ; minimum
+                        )
+        IN      NS      dns.test.
+
+10      IN      PTR     client.a.test.
+20      IN      PTR     plain.smtp.a.test.
+21      IN      PTR     dkim.smtp.a.test.

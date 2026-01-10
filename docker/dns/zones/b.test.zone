@@ -1,0 +1,36 @@
+$ORIGIN b.test.
+$TTL 60
+@       IN      SOA     dns.test. admin.b.test. (
+                        2024010101 ; serial
+                        3600       ; refresh
+                        1800       ; retry
+                        604800     ; expire
+                        86400      ; minimum
+                        )
+        IN      NS      dns.test.
+
+; MX records for b.test
+@                       IN      MX      10      mx.b.test.
+@                       IN      A       _NETWORK.2.30
+
+; IMAP server (MDA)
+imap                    IN      MX      10      imap.b.test.
+imap                    IN      A       _NETWORK.2.40
+
+; MX servers (MTA)
+; plain MX
+mx                      IN      MX      10      mx.b.test.
+mx                      IN      A       _NETWORK.2.30
+plain.mx                IN      MX      10      mx.b.test.
+
+; SPF MX
+spf                     IN      MX      10      spf.mx.b.test.
+spf.mx                  IN      A       _NETWORK.2.31
+
+; DKIM MX
+dkim                    IN      MX      10      dkim.mx.b.test.
+dkim.mx                 IN      A       _NETWORK.2.32
+
+; DMARC MX
+dmarc                   IN      MX      10      dmarc.mx.b.test.
+dmarc.mx                IN      A       _NETWORK.2.33

@@ -1,0 +1,41 @@
+$ORIGIN a.test.
+$TTL 60
+@       IN      SOA     dns.test. admin.a.test. (
+                        2024010101 ; serial
+                        3600       ; refresh
+                        1800       ; retry
+                        604800     ; expire
+                        86400      ; minimum
+                        )
+        IN      NS      dns.test.
+
+; SPF record for a.test
+@                       IN      TXT     "v=spf1 ip4:_NETWORK.1.20/31 -all"
+@                       IN      TXT     "this is top level"
+
+; DMARC record
+_dmarc                  IN      TXT     "v=DMARC1; p=quarantine; pct=100"
+
+; client (MUA)
+client                  IN      A       _NETWORK.1.10
+
+; SMTP servers
+plain.smtp              IN      A       _NETWORK.1.20
+dkim.smtp               IN      A       _NETWORK.1.21
+
+; DKIM subdomains with SPF
+pass.dkim               IN      TXT     "v=spf1 ip4:_NETWORK.1.20/31 -all"
+fail.dkim               IN      TXT     "v=spf1 ip4:_NETWORK.1.20/31 -all"
+
+; DKIM public keys
+smtpbook._domainkey     IN      TXT     ( "v=DKIM1; k=rsa; "
+        "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvJtPbZEEP/sIWhLuN01iAoD4ha6xkVcCEwRthuMUG7ZVc4AEGXIqu5zd2e1aNgo59GGQ5OPo6dluj2Tpa+7yjfuc9qV8ZHPZK6UAYAwFiWGBs51gQZr4NsvIgILdYfjsHMDw9cn+mDdPpBSAl2iL7ioyEOZYBtmwcAGslH62AWR4rIn9tw04NiHGVG6SRDl2/pCADO3e9AweHYDHa"
+        "ufGG8QjAdrSoTS++5kMJg+ECGRHUwbPC5d2ayYZiVp1Zfq3RiLubnG+F1YN80reGTZ2jEEWNqCj4Q8cbv/vtY/Yl1qa/zn027lGq+KRjyWDrsysryl+6f0AwlwcNVChB9UQxQIDAQAB" )
+
+smtpbook._domainkey.pass.dkim   IN      TXT     ( "v=DKIM1; k=rsa; "
+        "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoEarvntWqFTV9Fd5XrHXa+64Wq5ptKsPZpJ5GwLOGw+haA9Dq0vcVV140V2PRaE30ciiR/BZ7IMaksa3oECPxo5LtsZ1dIBqVr7mxlpa27Cmi8K6yy9phQH/YBzfoEdouGVqDGnvmWZRA0B1PkWxtl7SxVkBYOFoVkrlLHGPk5Ze0/0cR+wRkQFzbN6o0/9i5ophV+/EA6SvZ2wwX"
+        "U/m3nvHHqP7xioNJESWwtHx7NdOlkdwWs1XAn/YQkfWPa84wG5iY2dPehzHV6z60nTOSHmp9zVDM9vOUlU/m6y2HhSXkA2o4Iwudxvti8Wa9+pxNaNlsWUTVXQy1PE+oz6Z0wIDAQAB" )
+
+smtpbook._domainkey.fail.dkim   IN      TXT     ( "v=DKIM1; k=rsa; "
+        "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvJtPbZEEP/sIWhLuN01iAoD4ha6xkVcCEwRthuMUG7ZVc4AEGXIqu5zd2e1aNgo59GGQ5OPo6dluj2Tpa+7yjfuc9qV8ZHPZK6UAYAwFiWGBs51gQZr4NsvIgILdYfjsHMDw9cn+mDdPpBSAl2iL7ioyEOZYBtmwcAGslH62AWR4rIn9tw04NiHGVG6SRDl2/pCADO3e9AweHYDHa"
+        "ufGG8QjAdrSoTS++5kMJg+ECGRHUwbPC5d2ayYZiVp1Zfq3RiLubnG+F1YN80reGTZ2jEEWNqCj4Q8cbv/vtY/Yl1qa/zn027lGq+KRjyWDrsysryl+6f0AwlwcNVChB9UQxQIDAQAB" )

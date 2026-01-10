@@ -1,0 +1,15 @@
+$ORIGIN y.test.
+$TTL 60
+@       IN      SOA     dns.test. admin.y.test. (
+                        2024010101 ; serial
+                        3600       ; refresh
+                        1800       ; retry
+                        604800     ; expire
+                        86400      ; minimum
+                        )
+        IN      NS      dns.test.
+
+; DKIM public key
+smtpbook._domainkey     IN      TXT     ( "v=DKIM1; k=rsa; "
+        "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyiCrNRLHdSOSdEVVYlAd2+3Pq3YssNYleDRiW28FVhE6YKNbN0mYFtK9u5CjcjpBzaGTGnPtPM+UCNbLAMpJntsZGIiQPUGBA81kiyeU9j/avWX6sjS5hlRt/jeHr8TL9jMnzRfx/+M2yPlTBPciHVOsAhPo1n7HQ1oX9jnluXdAod9rdgDAYf4JwEQyUO2RCpy4bFOpkGoET8VvC"
+        "M4oxJEjMRy56VaDrc8xE18ZSU+MOtgeSrqKeps5sntVi9GLp45Jeh94g6mb7aYW/LmUawFdSy7oO6cKwl0WJG5DxWEtn+SpxY2QeWc6Vq7eYMpZEIJjtQmsL3GDNc1HIUMfEwIDAQAB" )
