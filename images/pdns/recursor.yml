@@ -1,0 +1,38 @@
+dnssec:
+  validation: off
+
+incoming:
+  listen:
+    - 0.0.0.0:53
+
+logging:
+  disable_syslog: true
+  loglevel: 3
+  quiet: false
+  trace: false
+  common_errors: false
+  structured_logging_backend: json
+
+# 全てのクエリをログに流すため、キャッシュを無効化
+packetcache:
+  disable: true
+
+recursor:
+  daemon: false
+  forward_zones:
+    - zone: "."
+      forwarders:
+        - 127.0.0.1:5300
+    - zone: "test"
+      forwarders:
+        - 127.0.0.1:5300
+    - zone: "10.in-addr.arpa"
+      forwarders:
+        - 127.0.0.1:5300
+  setgid: pdns
+  setuid: pdns
+  socket_dir: /run/pdns-recursor
+  lua_dns_script: /etc/powerdns/query-log.lua
+  hint_file: no
+  security_poll_suffix: ""
+  root_nx_trust: false

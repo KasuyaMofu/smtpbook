@@ -1,0 +1,31 @@
+FROM kasuyamofu/smtpbook-base:latest
+
+# Add PowerDNS official repository for newer versions
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    curl \
+    gnupg \
+    ca-certificates && \
+    echo "deb [arch=arm64 signed-by=/etc/apt/keyrings/powerdns.asc] http://repo.powerdns.com/ubuntu noble-rec-51 main" > /etc/apt/sources.list.d/powerdns.list && \
+    echo "deb [arch=arm64 signed-by=/etc/apt/keyrings/powerdns.asc] http://repo.powerdns.com/ubuntu noble-auth-49 main" >> /etc/apt/sources.list.d/powerdns.list && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://repo.powerdns.com/FD380FBB-pub.asc -o /etc/apt/keyrings/powerdns.asc && \
+    printf "Package: pdns-*\nPin: origin repo.powerdns.com\nPin-Priority: 600\n" > /etc/apt/preferences.d/powerdns && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y \
+    pdns-server \
+    pdns-backend-sqlite3 \
+    pdns-tools \
+    pdns-recursor \
+    sqlite3 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/lib/powerdns /var/log/pdns /run/pdns /run/pdns-recursor /etc/powerdns/zones && \
+    chown -R pdns:pdns /var/lib/powerdns /var/log/pdns /run/pdns /run/pdns-recursor
+
+COPY pdns/pdns.conf /etc/powerdns/pdns.conf
+COPY pdns/recursor.yml /etc/powerdns/recursor.yml
+COPY pdns/query-log.lua /etc/powerdns/query-log.lua
+
+RUN chown root:pdns /etc/powerdns/pdns.conf /etc/powerdns/recursor.yml /etc/powerdns/query-log.lua && \
+    chmod 640 /etc/powerdns/pdns.conf /etc/powerdns/recursor.yml /etc/powerdns/query-log.lua

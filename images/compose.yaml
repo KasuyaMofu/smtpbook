@@ -23,13 +23,13 @@ services:
       - postfix
     image: kasuyamofu/smtpbook-dovecot:latest
 
-  unbound:
+  pdns:
     build:
       context: .
-      dockerfile: Dockerfile-unbound
-    depends_on: 
+      dockerfile: Dockerfile-pdns
+    depends_on:
       - base
-    image: kasuyamofu/smtpbook-unbound:latest
+    image: kasuyamofu/smtpbook-pdns:latest
 
   rspamd:
     build:

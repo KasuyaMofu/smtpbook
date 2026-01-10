@@ -1,12 +1,10 @@
-FROM kasuyamofu/smtpbook-unbound:latest
+FROM kasuyamofu/smtpbook-pdns:latest
 
-COPY unbound/unbound.conf.d/* /etc/unbound/unbound.conf.d/
+COPY zones/*.zone /etc/powerdns/zones/
 
 ARG NETWORK
-RUN sed -i "s/_NETWORK/${NETWORK}/" /etc/unbound/unbound.conf.d/*.conf
-
-RUN unbound-checkconf
+RUN sed -i "s/_NETWORK/${NETWORK}/g" /etc/powerdns/zones/*.zone
 
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
-EXPOSE 53/TCP 53/UDP
+EXPOSE 53/tcp 53/udp
