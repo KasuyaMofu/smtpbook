@@ -7,7 +7,9 @@ FROM ubuntu:24.04
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     dnsutils iputils-ping vim iproute2 tzdata less sudo \
+    locales locales-all \
     telnet tcpdump tshark jq && \
     rm -rf /var/lib/apt/lists/*
 
+ENV LANG=en_US.UTF-8
 ENV TZ=Asia/Tokyo
