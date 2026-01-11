@@ -1,7 +1,7 @@
 .PHONY: up down stop view build kill build build/* scenario*/*
 
 build/images:
-	cd images && docker compose --env-file ../.env build && cd ..
+	cd images && docker compose --env-file ../.env build base && docker compose --env-file ../.env build postfix &&  docker compose --env-file ../.env build && cd ..
 build/docker:
 	docker compose build
 build: build/images build/docker
@@ -25,6 +25,8 @@ log/a-smtp-dkim/rspamd:
 log/b-mx-dkim/rspamd:
 	docker compose exec b-mx-dkim tail -n 0 -f /var/log/rspamd/rspamd.log
 
+remove:
+	docker-compose down --rmi all --volumes --remove-orphans
 
 ##                                        subject     From                       To                  SMTP sever         (option) Envelope-From
 ## 1hop(client -> imap)
