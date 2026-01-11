@@ -5,9 +5,10 @@ RUN apt-get update && \
     postfix && \
     rm -rf /var/lib/apt/lists/*
 
-RUN sed -i -E "/(enable_original_recipient|prepend_delivered_header|maillog_file|mail_spool_directory|mydestination|home_mailbox|mynetworks|inet_protocols)/d" /etc/postfix/main.cf && \
+RUN sed -i -E "/(enable_original_recipient|smtpd_tls_security_level|prepend_delivered_header|maillog_file|mail_spool_directory|mydestination|home_mailbox|mynetworks|inet_protocols)/d" /etc/postfix/main.cf && \
     echo "\
 enable_original_recipient = no\n\
+smtpd_tls_security_level = none\n\
 prepend_delivered_header = \n\
 maillog_file = /var/log/postfix\n\
 mail_spool_directory = /var/mail/\n\
