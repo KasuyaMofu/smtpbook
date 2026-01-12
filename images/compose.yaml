@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-base
+      args:
+        NETWORK: ${NETWORK}
     image: kasuyamofu/smtpbook-base:latest
 
   postfix:
@@ -37,6 +39,12 @@ services:
       dockerfile: Dockerfile-rspamd
       args:
         NETWORK: ${NETWORK}
-    depends_on: 
+    depends_on:
       - postfix
     image: kasuyamofu/smtpbook-rspamd:latest
+
+  milter:
+    build:
+      context: .
+      dockerfile: Dockerfile-milter
+    image: kasuyamofu/smtpbook-milter:latest
