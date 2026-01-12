@@ -1,4 +1,4 @@
-FROM kasuyamofu/smtpbook-milter:latest AS milter
+FROM kasuyamofu/smtpbook-proxy:latest AS proxy
 FROM kasuyamofu/smtpbook-dovecot:latest
 
 ARG HOSTNAME FORWARD_TO
@@ -15,16 +15,18 @@ RUN DOMAIN=`echo ${HOSTNAME} | sed -E 's/.*\.([^.]+\.[^.]+)$/\1/'` && \
     echo '"|/usr/sbin/sendmail -f user2+forward@'"${DOMAIN}"' user2@'"${FORWARD_TO}"'"' >> /home/user2/.forward \
     ; fi
 
-RUN echo "smtpd_milters = inet:127.0.0.1:10025" >> /etc/postfix/main.cf && \
-    echo "non_smtpd_milters = inet:127.0.0.1:10025" >> /etc/postfix/main.cf && \
-    echo "milter_default_action = accept" >> /etc/postfix/main.cf
+# Enable XCLIENT for proxy
+RUN echo "smtpd_authorized_xclient_hosts = 127.0.0.1" >> /etc/postfix/main.cf
+
+# Change Postfix to listen on port 10025
+RUN sed -i 's/^smtp      inet/10025 inet/' /etc/postfix/master.cf
 
 ## rsyslog hostname
 RUN echo "\$LocalHostName ${HOSTNAME}" >> /etc/rsyslog.conf
 
-COPY --from=milter /smtp-command-output-milter /usr/local/bin/
+COPY --from=proxy /smtp-receive-proxy /usr/local/bin/
 
 COPY ./example/* /
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
-EXPOSE 143/TCP
+EXPOSE 25/tcp 143/tcp
