@@ -2,6 +2,15 @@ x-dns: &dns
   dns: ${NETWORK}.0.254
 
 services:
+  logserver:
+    container_name: logserver
+    hostname: logserver
+    build:
+      context: ./docker/logserver
+    networks:
+      localnet:
+        ipv4_address: ${NETWORK}.0.253
+
   dns:
     container_name: dns
     build:
@@ -12,7 +21,7 @@ services:
       localnet:
         ipv4_address: ${NETWORK}.0.254
 
-## a.test      
+## a.test
   a-client:
     <<: *dns
     container_name: a-client
