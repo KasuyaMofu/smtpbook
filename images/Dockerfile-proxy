@@ -1,0 +1,8 @@
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /app
+COPY smtp-receive-proxy/ .
+RUN go mod download && CGO_ENABLED=0 go build -o smtp-receive-proxy .
+
+FROM scratch
+COPY --from=builder /app/smtp-receive-proxy /smtp-receive-proxy

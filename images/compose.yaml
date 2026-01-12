@@ -43,8 +43,8 @@ services:
       - postfix
     image: kasuyamofu/smtpbook-rspamd:latest
 
-  milter:
+  proxy:
     build:
       context: .
-      dockerfile: Dockerfile-milter
-    image: kasuyamofu/smtpbook-milter:latest
+      dockerfile: Dockerfile-proxy
+    image: kasuyamofu/smtpbook-proxy:latest
