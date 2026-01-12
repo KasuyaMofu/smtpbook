@@ -1,0 +1,8 @@
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /app
+COPY smtp-command-output-milter/ .
+RUN go mod download && CGO_ENABLED=0 go build -o smtp-command-output-milter .
+
+FROM scratch
+COPY --from=builder /app/smtp-command-output-milter /smtp-command-output-milter
