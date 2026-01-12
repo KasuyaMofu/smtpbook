@@ -138,27 +138,71 @@ func handleIncoming(clientConn net.Conn, postfixAddr string) {
 		return
 	}
 
-	// Send XCLIENT to Postfix to pass original client IP
-	xclient := fmt.Sprintf("XCLIENT ADDR=%s\r\n", clientIP)
-	_, err = serverConn.Write([]byte(xclient))
-	if err != nil {
-		log.Printf("Failed to send XCLIENT: %v", err)
-		return
-	}
-
-	// Read XCLIENT response
-	_, err = serverReader.ReadString('\n')
-	if err != nil {
-		log.Printf("Failed to read XCLIENT response: %v", err)
-		return
-	}
-
 	// Send banner to client
 	logOutput(serverIP, clientIP, "S", banner)
 	_, err = clientConn.Write([]byte(banner))
 	if err != nil {
 		log.Printf("Failed to send banner to client: %v", err)
 		return
+	}
+
+	// Wait for HELO/EHLO from client to get the NAME
+	heloLine, err := clientReader.ReadString('\n')
+	if err != nil {
+		log.Printf("Failed to read HELO/EHLO: %v", err)
+		return
+	}
+	logOutput(clientIP, serverIP, "C", heloLine)
+
+	// Extract NAME from HELO/EHLO command
+	heloName := "[UNAVAILABLE]"
+	upperLine := strings.ToUpper(strings.TrimSpace(heloLine))
+	if strings.HasPrefix(upperLine, "HELO ") || strings.HasPrefix(upperLine, "EHLO ") {
+		parts := strings.Fields(heloLine)
+		if len(parts) >= 2 {
+			heloName = strings.TrimSpace(parts[1])
+		}
+	}
+
+	// Send XCLIENT to Postfix to pass original client IP and NAME
+	xclient := fmt.Sprintf("XCLIENT NAME=%s ADDR=%s\r\n", heloName, clientIP)
+	_, err = serverConn.Write([]byte(xclient))
+	if err != nil {
+		log.Printf("Failed to send XCLIENT: %v", err)
+		return
+	}
+
+	// Read XCLIENT response (220 new banner)
+	_, err = serverReader.ReadString('\n')
+	if err != nil {
+		log.Printf("Failed to read XCLIENT response: %v", err)
+		return
+	}
+
+	// Forward the original HELO/EHLO to Postfix
+	_, err = serverConn.Write([]byte(heloLine))
+	if err != nil {
+		log.Printf("Failed to forward HELO/EHLO: %v", err)
+		return
+	}
+
+	// Read HELO/EHLO response (may be multi-line for EHLO)
+	for {
+		resp, err := serverReader.ReadString('\n')
+		if err != nil {
+			log.Printf("Failed to read HELO/EHLO response: %v", err)
+			return
+		}
+		logOutput(serverIP, clientIP, "S", resp)
+		_, err = clientConn.Write([]byte(resp))
+		if err != nil {
+			log.Printf("Failed to send HELO/EHLO response: %v", err)
+			return
+		}
+		// Check if this is the last line (no hyphen after status code)
+		if len(resp) >= 4 && resp[3] != '-' {
+			break
+		}
 	}
 
 	// Proxy the rest of the conversation
