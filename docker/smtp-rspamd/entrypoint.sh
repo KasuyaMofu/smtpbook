@@ -9,4 +9,4 @@ rsyslogd
 redis-server --daemonize yes
 sudo -u rspamd /usr/bin/rspamd -c /etc/rspamd/rspamd.conf
 postfix start
-tail ---disable-inotify -f /var/log/syslog
+sleep infinity
