@@ -50,10 +50,10 @@ rsyslogd
 
 # Start PowerDNS Recursor in foreground (port 53)
 # Query logs will be visible in docker compose up output
-(/usr/sbin/pdns_recursor --config-dir=/etc/powerdns 2>&1 | grep --line-buffered "lua" | sed -u -e 's/subsystem=.*//' -e 's/msg="//' -e 's/\\//g' -e 's/$"//' | logger -t pdns-recursor) &
+(/usr/sbin/pdns_recursor --config-dir=/etc/powerdns 2>&1 | grep --line-buffered "lua" | sed -u -e 's/subsystem=.*//' -e 's/msg="//' -e 's/\\//g' -e 's/$"//' -e 's/^.\{16\}//' | logger -t recursor) &
 
 touch /var/log/syslog
 chown syslog:adm /var/log/syslog
 chmod 640 /var/log/syslog
 
-tail ---disable-inotify -f /var/log/syslog
+sleep infinity
