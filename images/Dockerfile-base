@@ -8,8 +8,12 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     dnsutils iputils-ping vim iproute2 tzdata less sudo \
     locales locales-all \
+    rsyslog \
     telnet tcpdump tshark jq && \
     rm -rf /var/lib/apt/lists/*
+
+RUN sed -i '/imklog/s/^/# /g' /etc/rsyslog.conf && \
+    echo '$EscapeControlCharactersOnReceive off' >> /etc/rsyslog.conf
 
 ENV LANG=en_US.UTF-8
 ENV TZ=Asia/Tokyo
