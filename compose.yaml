@@ -7,6 +7,10 @@ services:
     hostname: logserver
     build:
       context: ./docker/logserver
+    ports:
+      - "8080:80"
+    depends_on:
+      - dns
     networks:
       localnet:
         ipv4_address: ${NETWORK}.0.253
@@ -17,6 +21,8 @@ services:
       context: ./docker/dns
       args:
         NETWORK: ${NETWORK}
+    expose:
+      - "5432"
     networks:
       localnet:
         ipv4_address: ${NETWORK}.0.254
