@@ -14,10 +14,11 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
     pdns-server \
-    pdns-backend-sqlite3 \
+    pdns-backend-pgsql \
     pdns-tools \
     pdns-recursor \
-    sqlite3 && \
+    postgresql \
+    postgresql-contrib && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/lib/powerdns /var/log/pdns /run/pdns /run/pdns-recursor /etc/powerdns/zones && \
