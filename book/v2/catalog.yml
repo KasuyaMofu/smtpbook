@@ -1,0 +1,16 @@
+PREDEF:
+  - 01-preface.re
+
+CHAPS:
+  - 10-smtp.re
+  - 11-dmarc.re
+  - 12-spf.re
+  - 13-dkim.re
+  - 20-blocklist.re
+  - 30-examples.re
+
+APPENDIX:
+  - 90-appendix.re
+
+POSTDEF:
+  - 99-contributors.re
