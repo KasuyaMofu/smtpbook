@@ -51,3 +51,21 @@
 - https://zenn.dev/sikkim/articles/d5e6d851d100d2
 - https://github.com/rspamd/rspamd/issues/4865
 - https://tech.quickguard.jp/posts/dkim/
+
+## v2 (〜2026/04/26)
+
+- https://baremail.jp/blog/2023/09/26/3474/
+- https://faq.idcf.jp/faq/show/283?site_domain=default
+- https://review-knowledge-ja.readthedocs.io/ja/latest/latex/linebreak-verbatim.html
+- https://qiita.com/kauplan/items/01dee0249802711d30a6
+- https://blog.mksc.jp/contents/resize_img_when_used_pandoc/
+- https://geniusium.hatenablog.com/entry/2022/09/03/230551
+- https://github.com/kmuto/pandoc2review/blob/main/markdown-format.ja.md
+- https://medemanabu.net/latex/color-textcolor/
+- https://ja.overleaf.com/learn/latex/Using_colors_in_LaTeX
+- https://en.wikipedia.org/wiki/Cisco_Talos
+- https://qiita.com/suzutsuki0220/items/64e519e124e6fef323f9
+- https://www.server-memo.net/server-setting/postfix/smtpd_sender_restrictions.html
+- https://www.naritai.jp/dmarc_example.html
+- https://www.reddit.com/r/EnglishLearning/comments/1ce9l6t/what_is_the_difference_between_qualifier_and/?tl=ja
+- https://www.itmedia.co.jp/news/articles/2402/09/news114.html

@@ -1,0 +1,49 @@
+% Re:VIEW 2互換のlayout.tex.erb記載相当の内容
+\RequirePackage{review-base}
+
+% Re:VIEW 2互換のreviewmacro.sty(装飾カスタマイズ)内容
+\RequirePackage{review-style}
+
+% TechBooster固有マクロ
+\RequirePackage{techbooster-doujin-base}
+
+% 囲み飾りの設定
+\ifdefined\reviewboxsetting%
+  \RequirePackage{review-tcbox}
+\fi
+
+% ユーザー固有の定義
+\RequirePackage{review-custom}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% https://qiita.com/nanbuwks/items/dc52302adfa4a1ab0fbd
+%% --- reviewemlist (キャプションなしコード) ---
+\renewenvironment{reviewemlist}{%
+  \vspace{0.1zw} % ← \medskipを具体的な数値に変更（小さくしたければ 0.1zw などに）
+  \footnotesize\begin{shaded}\ifdefined\reviewlistxkanjiskip\xkanjiskip=\reviewlistxkanjiskip\fi\setlength{\baselineskip}{1.2zw}\begin{alltt}}{%
+  \end{alltt}\end{shaded}\vspace{-0.5zw}} % ← 末尾の余白を負の値で相殺して詰める
+
+%% --- reviewlist (キャプションありコード) ---
+\renewenvironment{reviewlist}{%
+  \vspace{0.1zw} % ← 開始時の余白
+  \begin{shaded}\footnotesize\ifdefined\reviewlistxkanjiskip\xkanjiskip=\reviewlistxkanjiskip\fi\setlength{\baselineskip}{1.2zw}\begin{alltt}}{%
+  \end{alltt}\end{shaded}\par\vspace*{-0.5zw}} % ← 0.2zwを負の値（例：-0.5zw）にすると上の段落に近づきます
+
+%% --- reviewcmd (コマンドライン) ---
+\renewenvironment{reviewcmd}{%
+  \color{white}\vspace{0.1zw} % ← \medskipを具体的な数値に変更
+  \footnotesize\begin{shadedb}\ifdefined\reviewlistxkanjiskip\xkanjiskip=\reviewlistxkanjiskip\fi\setlength{\baselineskip}{1.2zw}\begin{alltt}}{%
+  \end{alltt}\end{shadedb}\vspace{-0.5zw}} % ← 末尾の余白を詰める    
+
+
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% run \@endofreviewmacrohook at the end of reviewmacro style
+\@ifundefined{@endofreviewmacrohook}{}{%
+\let\AtEndOfReVIEWMacro\@firstofone
+\@endofreviewmacrohook}
+
+\endinput
+
